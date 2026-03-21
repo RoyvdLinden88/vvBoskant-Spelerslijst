@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Nieuw project</h1>
+    <h1>Spelerslijst</h1>
     <ul>
       <li v-for="player in sortedPlayers" :key="player.id">
         {{ getFullName(player) }}
