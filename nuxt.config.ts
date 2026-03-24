@@ -9,14 +9,12 @@ export default defineNuxtConfig({
   },
 
   css: ["~/assets/css/main.css"],
-  modules: ["@nuxtjs/supabase"],
+  modules: [
+  //'@nuxt/content',
+  "@nuxtjs/supabase"],
   supabase: {
     url: process.env.SUPABASE_URL,
     key: process.env.SUPABASE_PUBLISHABLE_KEY,
-    redirectOptions: {
-      login: "/login",
-      callback: "/confirm",
-      exclude: ["/", "/chat"],
-    },
+    redirect: false,
   },
 });
