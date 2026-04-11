@@ -9,6 +9,7 @@
       </h2>
       <form @submit.prevent="handleCreate" class="flex flex-col sm:flex-row gap-2">
         <input
+          ref="firstNameInput"
           type="text"
           v-model="newPlayer.firstName"
           placeholder="Voornaam"
@@ -46,6 +47,7 @@
 const { saving, createPlayer, getFullName } = usePlayers()
 const { showToast } = useToast()
 
+const firstNameInput = ref(null)
 const newPlayer = reactive({ firstName: '', middleName: '', lastName: '' })
 
 async function handleCreate() {
@@ -54,5 +56,7 @@ async function handleCreate() {
   newPlayer.middleName = ''
   newPlayer.lastName = ''
   showToast(`${getFullName(data)} toegevoegd`)
+  await nextTick()
+  firstNameInput.value?.focus()
 }
 </script>

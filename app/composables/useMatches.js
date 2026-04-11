@@ -11,7 +11,7 @@ export function useMatches() {
       const { data, error } = await client
         .from('matches')
         .select()
-        .order('boskant1_datum', { ascending: true })
+        .order('boskant1_datum', { ascending: false, nullsFirst: false })
       if (error) throw error
       matches.value = data
     } finally {
@@ -19,15 +19,20 @@ export function useMatches() {
     }
   }
 
-  async function createMatch(form, playerSelections = []) {
+  async function createMatch(form, playerSelections = [], setActive = false) {
     saving.value = true
     try {
+      if (setActive) {
+        await client.from('matches').update({ active: false }).neq('id', 0)
+      }
+
       const { data, error } = await client
         .from('matches')
-        .insert(formToRow(form))
+        .insert({ ...formToRow(form), active: setActive })
         .select()
         .single()
       if (error) throw error
+      if (setActive) matches.value = matches.value.map(m => ({ ...m, active: false }))
       matches.value.push(data)
 
       if (playerSelections.length > 0) {
@@ -41,16 +46,21 @@ export function useMatches() {
     }
   }
 
-  async function updateMatch(id, form, playerSelections = []) {
+  async function updateMatch(id, form, playerSelections = [], setActive = false) {
     saving.value = true
     try {
+      if (setActive) {
+        await client.from('matches').update({ active: false }).neq('id', id)
+      }
+
       const { data, error } = await client
         .from('matches')
-        .update(formToRow(form))
+        .update({ ...formToRow(form), active: setActive })
         .eq('id', id)
         .select()
         .single()
       if (error) throw error
+      if (setActive) matches.value = matches.value.map(m => m.id === id ? m : { ...m, active: false })
       const idx = matches.value.findIndex(m => m.id === id)
       if (idx !== -1) matches.value[idx] = data
 

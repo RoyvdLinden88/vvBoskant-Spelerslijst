@@ -182,11 +182,11 @@ onMounted(async () => {
 })
 
 async function loadLatestMatch() {
-  // Fetch the latest match by created_at
+  // Fetch the active match
   const { data: matchData, error: matchError } = await client
     .from('matches')
     .select()
-    .order('created_at', { ascending: false })
+    .eq('active', true)
     .limit(1)
     .single()
 

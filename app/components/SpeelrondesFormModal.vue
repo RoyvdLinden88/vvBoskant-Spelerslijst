@@ -129,6 +129,14 @@
           </div>
         </div>
 
+        <!-- Active checkbox -->
+        <div class="form-control">
+          <label class="flex items-center gap-3 cursor-pointer select-none">
+            <input type="checkbox" v-model="setActive" class="checkbox checkbox-sm" style="--chkbg: #1a3a6b; --chkfg: white;" />
+            <span class="text-sm font-semibold" style="color: #111;">Stel deze speelronde in als actieve speelronde</span>
+          </label>
+        </div>
+
         <div class="modal-action mt-0">
           <button type="button" class="btn btn-ghost btn-sm uppercase tracking-wide font-bold" @click="close">Annuleren</button>
           <button
@@ -158,6 +166,7 @@ const editingId = ref(null)
 const isEditing = computed(() => editingId.value !== null)
 const playersOpen = ref(false)
 const loadingPlayers = ref(false)
+const setActive = ref(true)
 
 const emptyForm = () => ({
   boskant1_wedstrijd: '', boskant1_datum: '', boskant1_aanvang: '', boskant1_aanwezig: '', boskant1_opmerkingen: '',
@@ -190,11 +199,13 @@ async function open(match = null) {
 
   if (match) {
     editingId.value = match.id
+    setActive.value = match.active ?? false
     Object.assign(form, rowToForm(match))
     const existingMap = await fetchMatchPlayers(match.id)
     buildPlayerSelections(existingMap)
   } else {
     editingId.value = null
+    setActive.value = true
     Object.assign(form, emptyForm())
     buildPlayerSelections()
   }
@@ -209,10 +220,10 @@ function close() {
 
 async function handleSubmit() {
   if (isEditing.value) {
-    await updateMatch(editingId.value, form, playerSelections.value)
+    await updateMatch(editingId.value, form, playerSelections.value, setActive.value)
     showToast('Speelronde opgeslagen')
   } else {
-    await createMatch(form, playerSelections.value)
+    await createMatch(form, playerSelections.value, setActive.value)
     showToast('Speelronde toegevoegd')
   }
   close()

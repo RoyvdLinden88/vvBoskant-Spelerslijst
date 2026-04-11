@@ -20,13 +20,16 @@
       v-for="match in matches"
       :key="match.id"
       class="card shadow-md border-t-4 overflow-hidden"
-      style="background: white; border-top-color: #1a3a6b;"
+      :style="match.active ? 'background: white; border-top-color: #1a3a6b;' : 'background: #f9f9f9; border-top-color: #9ca3af;'"
     >
       <!-- Round header bar -->
-      <div class="flex items-center justify-between px-4 py-2.5" style="background-color: #1a3a6b;">
-        <span class="text-sm font-extrabold text-white tracking-wide">
-          {{ roundLabel(match) }}
-        </span>
+      <div class="flex items-center justify-between px-4 py-2.5" :style="match.active ? 'background-color: #1a3a6b;' : 'background-color: #9ca3af;'">
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-extrabold text-white tracking-wide">
+            {{ roundLabel(match) }}
+          </span>
+          <span v-if="match.active" class="badge badge-xs text-white border-white/40 font-bold uppercase tracking-wide" style="background-color: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);">Actief</span>
+        </div>
         <div class="flex gap-1">
           <button @click="emit('edit', match)" class="btn btn-ghost btn-xs btn-square text-white hover:bg-white/20" title="Bewerken">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -46,7 +49,7 @@
 
         <!-- Boskant 1 -->
         <div class="p-4">
-          <p class="text-xs font-extrabold uppercase tracking-widest mb-3" style="color: #1a3a6b;">Boskant 1</p>
+          <p class="text-xs font-extrabold uppercase tracking-widest mb-3" :style="match.active ? 'color: #1a3a6b;' : 'color: #9ca3af;'">Boskant 1</p>
           <p class="font-bold text-sm mb-2" style="color: #111;">{{ match.boskant1_wedstrijd || '—' }}</p>
           <div class="flex flex-col gap-1 text-xs text-gray-500">
             <span v-if="match.boskant1_datum" class="flex items-center gap-1.5">
@@ -73,7 +76,7 @@
 
         <!-- Boskant 2 -->
         <div class="p-4">
-          <p class="text-xs font-extrabold uppercase tracking-widest mb-3" style="color: #1a3a6b;">Boskant 2</p>
+          <p class="text-xs font-extrabold uppercase tracking-widest mb-3" :style="match.active ? 'color: #1a3a6b;' : 'color: #9ca3af;'">Boskant 2</p>
           <p class="font-bold text-sm mb-2" style="color: #111;">{{ match.boskant2_wedstrijd || '—' }}</p>
           <div class="flex flex-col gap-1 text-xs text-gray-500">
             <span v-if="match.boskant2_datum" class="flex items-center gap-1.5">
