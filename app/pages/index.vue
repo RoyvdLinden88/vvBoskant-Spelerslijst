@@ -223,9 +223,10 @@ const boskant1Players = computed(() =>
     .map(p => ({
       player_id: p.player_id,
       name: fullName(p.players),
+      last_name: p.players?.last_name ?? '',
       alsoBoskant2: p.boskant2,
     }))
-    .sort((a, b) => a.name.localeCompare(b.name, 'nl'))
+    .sort((a, b) => a.last_name.localeCompare(b.last_name, 'nl'))
 )
 
 // Players checked for boskant2, sorted by last name
@@ -235,9 +236,10 @@ const boskant2Players = computed(() =>
     .map(p => ({
       player_id: p.player_id,
       name: fullName(p.players),
+      last_name: p.players?.last_name ?? '',
       alsoBoskant1: p.boskant1,
     }))
-    .sort((a, b) => a.name.localeCompare(b.name, 'nl'))
+    .sort((a, b) => a.last_name.localeCompare(b.last_name, 'nl'))
 )
 
 const roundLabel = computed(() => {
